@@ -94,7 +94,7 @@ R. Cinar"""
             raise ValueError("DATABASE_URL not found in environment variables")
         
         # Optional validation
-        if not all([self.TELEGRAM_BOT_TOKEN, self.TELEGRAM_CHAT_ID]):
+        if not self.TELEGRAM_BOT_TOKEN or not self.TELEGRAM_CHAT_IDS:
             print("Warning: Telegram not fully configured. Notifications will be disabled.")
 
 # Create a global config instance
