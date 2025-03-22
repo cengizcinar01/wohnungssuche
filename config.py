@@ -27,23 +27,6 @@ class Config:
         }
     }
     
-    # Filtering
-    NEGATIVE_KEYWORDS = [
-        'keine leistungsempfänger',
-        'keine jobcenter',
-        'keine sozialleistungen',
-        'keine hartz',
-        'keine arbeitslosengeld',
-        'nur berufstätige',
-        'nur an berufstätige',
-        'keine alg',
-        'keine arbeitslosen',
-        'keine sozialhilfe',
-        'nur mit festanstellung',
-        'nur mit unbefristeter festanstellung',
-        'nur arbeitnehmer',
-    ]
-    
     # Search URLs (generated from config)
     @property
     def SEARCH_URLS(self) -> List[str]:

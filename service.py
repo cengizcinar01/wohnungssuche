@@ -9,7 +9,7 @@ from config import config
 from database import DatabaseManager, ListingRepository
 from scraper import ApartmentScraper, WebDriverFactory
 from notifier import NotificationService, create_notifier
-from utils import analyze_description
+# removed analyze_description import as it's no longer used
 
 logger = logging.getLogger(__name__)
 
@@ -33,14 +33,14 @@ class ApartmentService:
     async def process_listing(self, basic_info: Dict[str, Any], scraper: ApartmentScraper) -> bool:
         """
         Process a single apartment listing by fetching full details,
-        analyzing it, saving to database, and sending notifications if suitable.
+        saving to database, and sending notifications.
         
         Args:
             basic_info: Basic listing information from search results
             scraper: Scraper instance to fetch additional details
         
         Returns:
-            Boolean indicating if the listing was suitable
+            True if listing was processed successfully
         """
         listing_id = basic_info['listing_id']
         
@@ -56,22 +56,15 @@ class ApartmentService:
             if full_description:
                 basic_info['description'] = full_description
             
-            # Analyze description for suitability
-            is_suitable, matched_keywords = analyze_description(
-                basic_info['description'], 
-                config.NEGATIVE_KEYWORDS
-            )
-            
-            # Set the status based on analysis
-            status = 'suitable' if is_suitable else f"unsuitable: {', '.join(matched_keywords)}"
-            basic_info['status'] = status
+            # Set all listings as suitable since we're not filtering
+            basic_info['status'] = 'suitable'
             
             # Save to database
             self.db_repo.save_listing(basic_info)
-            logger.info(f"Saved listing {listing_id} with status: {status}")
+            logger.info(f"Saved listing {listing_id}")
             
-            # Only send notification if suitable
-            if is_suitable and self.notifier:
+            # Send notification for all listings
+            if self.notifier:
                 await self.notifier.send_listing_notification(basic_info)
                 logger.info(f"Notification sent for listing: {listing_id}")
             
@@ -79,7 +72,7 @@ class ApartmentService:
             self.db_repo.mark_listing_processed(listing_id)
             self.processed_ids.add(listing_id)
             
-            return is_suitable
+            return True
             
         except Exception as e:
             logger.error(f"Error processing listing {listing_id}: {str(e)}")
@@ -96,8 +89,7 @@ class ApartmentService:
         """
         stats = {
             'total_found': 0,
-            'suitable': 0,
-            'unsuitable': 0,
+            'processed': 0,
             'errors': 0,
         }
         
@@ -129,11 +121,8 @@ class ApartmentService:
                             # Process each listing
                             for basic_info in listings_data:
                                 try:
-                                    is_suitable = await self.process_listing(basic_info, scraper)
-                                    if is_suitable:
-                                        stats['suitable'] += 1
-                                    else:
-                                        stats['unsuitable'] += 1
+                                    await self.process_listing(basic_info, scraper)
+                                    stats['processed'] += 1
                                 except Exception as e:
                                     logger.error(f"Error processing individual listing: {str(e)}")
                                     stats['errors'] += 1
@@ -165,8 +154,7 @@ class ApartmentService:
         logger.info(
             f"Search cycle completed in {duration:.1f}s. "
             f"Found: {stats['total_found']}, "
-            f"Suitable: {stats['suitable']}, "
-            f"Unsuitable: {stats['unsuitable']}, "
+            f"Processed: {stats['processed']}, "
             f"Errors: {stats['errors']}"
         )
         

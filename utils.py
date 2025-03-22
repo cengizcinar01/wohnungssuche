@@ -56,32 +56,6 @@ def retry(max_retries: int = 3, delay: float = 1.0,
         return wrapper
     return decorator
 
-def analyze_description(description: str, negative_keywords: List[str]) -> Tuple[bool, List[str]]:
-    """
-    Analyze listing description for negative keywords.
-    
-    Args:
-        description: The listing description text
-        negative_keywords: List of negative keywords to check for
-    
-    Returns:
-        Tuple containing:
-        - is_suitable: Boolean indicating if the listing is suitable
-        - matched_keywords: List of matched negative keywords
-    """
-    if not description:
-        return True, []
-        
-    description_lower = description.lower()
-    
-    # Look for any matching keywords in the description
-    matched_keywords = [
-        keyword for keyword in negative_keywords
-        if keyword.lower() in description_lower
-    ]
-    
-    return not bool(matched_keywords), matched_keywords
-
 def extract_number(text: str) -> Optional[float]:
     """
     Extract a number from a string.
