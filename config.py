@@ -59,16 +59,15 @@ class Config:
     # Contact message
     PREDEFINED_TEXT = """Guten Tag,
 
-wir sind eine Familie mit 3 schulpflichtigen Kindern und suchen nach Rückkehr aus der Türkei dringend eine Wohnung. Derzeit sind wir provisorisch bei Bekannten untergebracht.
+wir sind eine ruhige Familie mit drei schulpflichtigen Kindern und suchen eine passende Wohnung. Wir haben als Familie eine Zeit lang in der Türkei gelebt und dort versucht, uns ein Leben aufzubauen. Nun sind wir wieder in Deutschland und möchten hier einen Neuanfang starten. Die Mietzahlung erfolgt direkt vom Jobcenter, was Ihnen eine pünktliche und sichere Zahlung garantiert.
 
-Kurz zu uns:
-Wir sind ruhig, Nichtraucher, keine Haustiere und besitzen alle die deutsche Staatsbürgerschaft. Mietzahlung übernimmt vollständig das Jobcenter mit Direktüberweisung an Sie.
+Als Nichtraucher ohne Haustiere und mit deutscher Staatsbürgerschaft bieten wir ein unkompliziertes Mietverhältnis. Derzeit sind wir bei Bekannten untergebracht und würden uns über einen baldigen Besichtigungstermin freuen.
 
-Für weitere Informationen bin ich jederzeit unter der Nummer 01575 5259983 erreichbar.
+Für Rückfragen stehen wir Ihnen gerne unter 01575 5259983 zur Verfügung. Bei Bedarf geben wir Ihnen auch weitere Informationen.
 
-Würde mich über einen Besichtigungstermin freuen.
+Vielen Dank für Ihre Zeit und eine Rückmeldung!
 
-LG
+Mit freundlichen Grüßen
 
 R. Cinar"""
     
