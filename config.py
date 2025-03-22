@@ -12,7 +12,8 @@ class Config:
     
     # Search criteria
     SEARCH_CONFIG = {
-        'rooms': 3,
+        'min_rooms': 3,
+        'max_rooms': 4,
         'min_size': 70,
         'max_size': 95,
         'max_price': 973,
@@ -48,7 +49,7 @@ class Config:
     def SEARCH_URLS(self) -> List[str]:
         """Generate search URLs based on configuration."""
         return [
-            f"https://www.kleinanzeigen.de/s-wohnung-mieten/{district}/preis::{self.SEARCH_CONFIG['max_price']}/c203l{location_id}+wohnung_mieten.qm_d:{self.SEARCH_CONFIG['min_size']:.2f}%2C{self.SEARCH_CONFIG['max_size']:.2f}+wohnung_mieten.zimmer_d:{self.SEARCH_CONFIG['rooms']}.0%2C{self.SEARCH_CONFIG['rooms']}.0"
+            f"https://www.kleinanzeigen.de/s-wohnung-mieten/{district}/preis::{self.SEARCH_CONFIG['max_price']}/c203l{location_id}+wohnung_mieten.qm_d:{self.SEARCH_CONFIG['min_size']:.2f}%2C{self.SEARCH_CONFIG['max_size']:.2f}+wohnung_mieten.zimmer_d:{self.SEARCH_CONFIG['min_rooms']}%2C{self.SEARCH_CONFIG['max_rooms']}"
             for district, location_id in self.SEARCH_CONFIG['districts'].items()
         ]
     
