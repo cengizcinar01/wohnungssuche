@@ -27,6 +27,9 @@ class WebDriverFactory:
         """Create and configure a Chrome WebDriver instance."""
         options = Options()
         
+        # Use system Chromium
+        options.binary_location = "/usr/bin/chromium"
+        
         # Common options
         options.add_argument('--disable-gpu')
         options.add_argument('--no-sandbox')
@@ -42,7 +45,8 @@ class WebDriverFactory:
         else:
             options.add_argument('--start-maximized')
         
-        driver = webdriver.Chrome(options=options)
+        service = Service(executable_path="/usr/bin/chromedriver")
+        driver = webdriver.Chrome(service=service, options=options)
         driver.set_page_load_timeout(config.PAGE_LOAD_TIMEOUT)
         return driver
 
