@@ -1,0 +1,18 @@
+# Core dependencies
+selenium==4.18.1
+psycopg2==2.9.10
+python-dotenv==1.0.1
+requests==2.31.0
+python-telegram-bot==20.8
+
+# Additional dependencies
+aiohttp==3.9.3
+asyncio==3.4.3
+typing-extensions==4.10.0
+webdriver-manager==4.0.1
+
+# Development and testing
+pytest==7.4.0
+pytest-asyncio==0.21.1
+black==24.1.1
+pylint==3.0.3
