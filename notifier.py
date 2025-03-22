@@ -21,10 +21,10 @@ class NotificationService:
 class TelegramNotifier(NotificationService):
     """Telegram-based notification service."""
     
-    def __init__(self, bot_token: str, chat_id: str):
-        """Initialize with the Telegram bot token and chat ID."""
+    def __init__(self, bot_token: str, chat_ids: List[str]):
+        """Initialize with the Telegram bot token and chat IDs."""
         self.bot_token = bot_token
-        self.chat_id = chat_id
+        self.chat_ids = chat_ids
         self._bot = None
         self.use_fallback = False
     
@@ -41,51 +41,60 @@ class TelegramNotifier(NotificationService):
         return self._bot
     
     async def send_notification(self, message: str) -> bool:
-        """Send a notification via Telegram."""
-        # Check if we should use the fallback method
-        if self.use_fallback or not self.bot_token or not self.chat_id:
+        """Send a notification via Telegram to all configured chat IDs."""
+        if self.use_fallback or not self.bot_token or not self.chat_ids:
             return self._send_notification_fallback(message)
             
-        # Try to use the async bot API first
         if not self.bot:
             logger.warning("Telegram bot not initialized, using fallback method")
             return self._send_notification_fallback(message)
         
-        try:
-            # Try the async approach first
-            await self.bot.send_message(
-                chat_id=self.chat_id,
-                text=message,
-                parse_mode="HTML"
-            )
-            logger.info("Notification sent successfully via async API")
-            return True
-        except TelegramError as e:
-            logger.error(f"Error sending Telegram message via async API: {e}")
-            # If the async approach fails, try the fallback
-            return self._send_notification_fallback(message)
+        success = True
+        for chat_id in self.chat_ids:
+            try:
+                await self.bot.send_message(
+                    chat_id=chat_id,
+                    text=message,
+                    parse_mode="HTML"
+                )
+                logger.info(f"Notification sent successfully to chat {chat_id} via async API")
+            except TelegramError as e:
+                logger.error(f"Error sending Telegram message to chat {chat_id} via async API: {e}")
+                # Try fallback for this specific chat_id
+                if not self._send_notification_fallback_to_chat(message, chat_id):
+                    success = False
+        
+        return success
     
     def _send_notification_fallback(self, message: str) -> bool:
-        """Send a notification using standard HTTP requests as fallback."""
-        if not self.bot_token or not self.chat_id:
+        """Send a notification using standard HTTP requests as fallback to all chats."""
+        if not self.bot_token or not self.chat_ids:
             logger.warning("Telegram configuration missing, check .env file")
             return False
             
+        success = True
+        for chat_id in self.chat_ids:
+            if not self._send_notification_fallback_to_chat(message, chat_id):
+                success = False
+        return success
+
+    def _send_notification_fallback_to_chat(self, message: str, chat_id: str) -> bool:
+        """Send a notification to a specific chat using standard HTTP requests."""
         try:
             response = requests.post(
                 f"https://api.telegram.org/bot{self.bot_token}/sendMessage",
                 json={
-                    "chat_id": self.chat_id,
+                    "chat_id": chat_id,
                     "text": message,
                     "parse_mode": "HTML"
                 },
                 timeout=10
             )
             response.raise_for_status()
-            logger.info("Notification sent successfully via fallback HTTP API")
+            logger.info(f"Notification sent successfully to chat {chat_id} via fallback HTTP API")
             return True
         except requests.RequestException as e:
-            logger.error(f"Error sending Telegram message via HTTP API: {e}")
+            logger.error(f"Error sending Telegram message to chat {chat_id} via HTTP API: {e}")
             return False
     
     def format_listing_message(self, listing_details: Dict[str, Any]) -> str:
@@ -208,8 +217,10 @@ class TelegramBotService:
 # Factory function to create the appropriate notifier
 def create_notifier() -> Optional[NotificationService]:
     """Create and return a notifier based on configuration."""
-    if config.TELEGRAM_BOT_TOKEN and config.TELEGRAM_CHAT_ID:
-        return TelegramNotifier(config.TELEGRAM_BOT_TOKEN, config.TELEGRAM_CHAT_ID)
-    else:
-        logger.warning("No notification configuration found")
-        return None
+    if config.TELEGRAM_BOT_TOKEN and config.TELEGRAM_CHAT_IDS:
+        chat_ids = config.TELEGRAM_CHAT_IDS
+        if chat_ids:
+            return TelegramNotifier(config.TELEGRAM_BOT_TOKEN, chat_ids)
+    
+    logger.warning("No notification configuration found")
+    return None

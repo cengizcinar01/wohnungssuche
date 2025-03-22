@@ -54,7 +54,12 @@ class Config:
     
     # Notification
     TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN', '')
-    TELEGRAM_CHAT_ID = os.getenv('TELEGRAM_CHAT_ID', '')
+    
+    @property
+    def TELEGRAM_CHAT_IDS(self) -> List[str]:
+        """Get list of Telegram chat IDs from environment variable."""
+        chat_ids = os.getenv('TELEGRAM_CHAT_IDS', '')
+        return [id.strip() for id in chat_ids.split(',') if id.strip()]
     
     # Database
     DATABASE_URL = os.getenv('DATABASE_URL', '')
