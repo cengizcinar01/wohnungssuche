@@ -34,7 +34,7 @@ The application is organized into the following modules:
    ```
    POSTGRES_PASSWORD=your_secure_password
    TELEGRAM_BOT_TOKEN=your_telegram_bot_token
-   TELEGRAM_CHAT_ID=your_telegram_chat_id
+   TELEGRAM_CHAT_IDS=chat_id1,chat_id2,chat_id3
    ```
 
 3. Build and start the containers:
@@ -62,7 +62,11 @@ docker compose logs -f app
 
    - `POSTGRES_PASSWORD`: A secure password for the database
    - `TELEGRAM_BOT_TOKEN`: Your Telegram bot token
-   - `TELEGRAM_CHAT_ID`: Your Telegram chat ID
+   - `TELEGRAM_CHAT_IDS`: A comma-separated list of Telegram chat IDs (e.g., "123456789,987654321"). To get chat IDs:
+     1. Start a chat with your bot
+     2. Send any message to the bot
+     3. Visit: `https://api.telegram.org/bot<YOUR_BOT_TOKEN>/getUpdates`
+     4. Look for the "chat" object in the response to find the "id"
 
 3. Use the repository URL and select the main branch.
 
@@ -100,7 +104,7 @@ docker compose logs -f app
    ```
    DATABASE_URL=postgresql://username:password@localhost:5432/wohnungssuche
    TELEGRAM_BOT_TOKEN=your_telegram_bot_token
-   TELEGRAM_CHAT_ID=your_telegram_chat_id
+   TELEGRAM_CHAT_IDS=123456789,987654321
    ```
 
 4. Set up the database:
