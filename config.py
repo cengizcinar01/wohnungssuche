@@ -41,7 +41,6 @@ class Config:
         'nur mit festanstellung',
         'nur mit unbefristeter festanstellung',
         'nur arbeitnehmer',
-        'Garagenstellplatz',
     ]
     
     # Search URLs (generated from config)
@@ -61,7 +60,7 @@ class Config:
     DATABASE_URL = os.getenv('DATABASE_URL', '')
     
     # Timing
-    CHECK_INTERVAL = 300  # 5 minutes
+    CHECK_INTERVAL = 100  # 5 minutes
     PAGE_LOAD_TIMEOUT = 10  # seconds
     ELEMENT_TIMEOUT = 15  # seconds for element waits
     
