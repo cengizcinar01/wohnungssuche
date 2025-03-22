@@ -63,7 +63,7 @@ wir sind eine ruhige Familie mit drei schulpflichtigen Kindern und suchen eine p
 
 Als Nichtraucher ohne Haustiere und mit deutscher Staatsbürgerschaft bieten wir ein unkompliziertes Mietverhältnis. Derzeit sind wir bei Bekannten untergebracht und würden uns über einen baldigen Besichtigungstermin freuen.
 
-Für Rückfragen stehen wir Ihnen gerne unter 01575 5259983 zur Verfügung. Bei Bedarf geben wir Ihnen auch weitere Informationen.
+Für Rückfragen stehe ich Ihnen gerne unter 01575 5259983 zur Verfügung.
 
 Vielen Dank für Ihre Zeit und eine Rückmeldung!
 
