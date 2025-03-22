@@ -213,7 +213,7 @@ class ApartmentScraper:
                             if 'm²' in text:
                                 basic_info['size'] = float(re.sub(r'[^\d.,]', '', text).replace(',', '.'))
                             elif 'Zi.' in text:
-                                basic_info['rooms'] = int(float(re.sub(r'[^\d.,]', '', text).replace(',', '.')))
+                                basic_info['rooms'] = float(re.sub(r'[^\d.,]', '', text).replace(',', '.'))
                         
                         # Location
                         location_elem = wait.until(
