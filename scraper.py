@@ -1,6 +1,9 @@
 """Scraper module for apartment listing retrieval."""
 import asyncio
+import os
 import re
+import tempfile
+import shutil
 import time
 from typing import Dict, List, Optional, Tuple, Any
 from selenium import webdriver
@@ -35,6 +38,10 @@ class WebDriverFactory:
         options.add_argument('--no-sandbox')
         options.add_argument('--disable-dev-shm-usage')
         
+        # Create a unique user data directory to avoid conflicts
+        temp_dir = tempfile.mkdtemp(prefix="chromium_user_data_")
+        options.add_argument(f'--user-data-dir={temp_dir}')
+        
         if config.HEADLESS_MODE:
             options.add_argument('--headless=new')  # new headless mode for Chrome
             # Additional headless optimizations
@@ -48,6 +55,10 @@ class WebDriverFactory:
         service = Service(executable_path="/usr/bin/chromedriver")
         driver = webdriver.Chrome(service=service, options=options)
         driver.set_page_load_timeout(config.PAGE_LOAD_TIMEOUT)
+        
+        # Store the temp directory for later cleanup
+        driver.temp_dir = temp_dir
+        
         return driver
 
 
@@ -57,6 +68,7 @@ class ApartmentScraper:
     def __init__(self):
         """Initialize the scraper with a WebDriver instance."""
         self.driver = WebDriverFactory.create_chrome_driver()
+        self.temp_dir = getattr(self.driver, 'temp_dir', None)
     
     def __enter__(self):
         """Context manager entry."""
@@ -66,6 +78,14 @@ class ApartmentScraper:
         """Context manager exit with driver cleanup."""
         if self.driver:
             self.driver.quit()
+            
+        # Clean up the temporary directory
+        if self.temp_dir and os.path.exists(self.temp_dir):
+            try:
+                shutil.rmtree(self.temp_dir)
+                print(f"Removed temporary Chrome user data directory: {self.temp_dir}")
+            except Exception as e:
+                print(f"Warning: Failed to remove temporary directory {self.temp_dir}: {e}")
     
     def handle_consent_banner(self) -> None:
         """Handle the GDPR consent banner if it appears."""

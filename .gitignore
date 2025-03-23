@@ -16,3 +16,6 @@ env/
 
 # Logs
 *.log
+
+# Temporary directories
+**/chromium_user_data_*/
