@@ -51,7 +51,7 @@ class Config:
     # Timing
     CHECK_INTERVAL = 100  # 5 minutes
     PAGE_LOAD_TIMEOUT = 10  # seconds
-    ELEMENT_TIMEOUT = 15  # seconds for element waits
+    ELEMENT_TIMEOUT = 10  # seconds for element waits (decreased from 15)
     
     # Browser settings
     HEADLESS_MODE = True  # Set to False to see the browser window

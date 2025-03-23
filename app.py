@@ -65,7 +65,13 @@ class ApartmentSearchApp:
             while self.is_running:
                 # Check for Telegram commands if bot is available
                 if self.telegram_bot:
-                    await self.telegram_bot.check_for_commands()
+                    try:
+                        await asyncio.wait_for(
+                            self.telegram_bot.check_for_commands(),
+                            timeout=5.0
+                        )
+                    except asyncio.TimeoutError:
+                        logger.warning("Telegram command check timed out, continuing execution")
                 
                 await asyncio.sleep(5)
                 

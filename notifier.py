@@ -166,7 +166,7 @@ class TelegramBotService:
         try:
             updates = await self.bot.get_updates(
                 offset=self.last_update_id + 1,
-                timeout=10
+                timeout=5  # Reduced timeout
             )
             
             for update in updates:
