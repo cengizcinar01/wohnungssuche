@@ -169,7 +169,7 @@ class ApartmentSearchRunner:
         self.db_manager = DatabaseManager()
         self.listing_repo = ListingRepository(self.db_manager)
         
-        # Notifier
+        # Notifier - enable notifications but don't use Bot polling
         self.notifier = create_notifier()
         
         # Core service

@@ -29,9 +29,9 @@ class ApartmentSearchApp:
         self.telegram_bot = None
         self.is_running = False
         
-        # Only initialize Telegram bot if tokens are provided
-        if config.TELEGRAM_BOT_TOKEN and config.TELEGRAM_CHAT_IDS:
-            self.telegram_bot = TelegramBotService(config.TELEGRAM_BOT_TOKEN)
+        # Disable Telegram bot in Coolify environment
+        # if config.TELEGRAM_BOT_TOKEN and config.TELEGRAM_CHAT_IDS:
+        #     self.telegram_bot = TelegramBotService(config.TELEGRAM_BOT_TOKEN)
     
     async def start(self) -> None:
         """Start all application services."""
