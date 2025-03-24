@@ -23,7 +23,9 @@ class Config:
             'arsten': '18881',           # Location ID for Arsten
             'habenhausen': '17479',      # Location ID for Habenhausen
             'huckelriede': '13502',      # Location ID for Huckelriede
-            'kattenturm': '21199'        # Location ID for Kattenturm
+            'kattenturm': '21199',        # Location ID for Kattenturm
+            'walle': '23',
+            'groepelingen': '21869'
         }
     }
     
