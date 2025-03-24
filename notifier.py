@@ -33,10 +33,8 @@ class TelegramNotifier(NotificationService):
         """Lazy-initialize the bot instance."""
         if self._bot is None and self.bot_token and not self.use_fallback:
             try:
-                # Force fallback to HTTP for Coolify environment
-                # to avoid connection pool issues
-                self.use_fallback = True
-                return None
+                self._bot = Bot(self.bot_token)
+                return self._bot
             except Exception as e:
                 logger.error(f"Failed to initialize Telegram bot: {e}")
                 self.use_fallback = True
